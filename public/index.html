@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)https://www.enableds.com/products/promobile/page-login.html -->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0 minimal-ui" /> 
+	<meta name="apple-mobile-web-app-capable" content="yes" /> 
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
+	<link rel="shortcut icon" href="https://www.enableds.com/products/promobile/images/splash/favicon.ico" type="image/x-icon" /> 
+	<title>划蒜小妹</title> 
+	<link href="./css/style.css" rel="stylesheet" type="text/css" /> 
+	<link href="./css/framework.css" rel="stylesheet" type="text/css" /> 
+	<link href="./css/font-awesome.css" rel="stylesheet" type="text/css" /> 
+	<link href="./css/animate.css" rel="stylesheet" type="text/css" /> 
+	<script type="text/javascript" src="./js/jquery.js"></script> 
+	<script type="text/javascript" src="./js/jqueryui.js"></script> 
+	<script type="text/javascript" src="./js/framework-plugins.js"></script> 
+	<script type="text/javascript" src="./js/custom.js"></script>
+	<script type="text/javascript" >
+		$(document).ready(function(){
+
+	        //获取url中的参数
+	        function getUrlParam(name) {
+	            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+	            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+	            if (r != null) return unescape(r[2]); return null; //返回参数值
+	        }
+
+	        var openId = getUrlParam('openId');
+
+	        if (openId) {
+	        	// 带参，跳转bot_index页面
+        		var botIndexUrl = "profile.html?openId=" + openId;
+				$(location).prop('href', botIndexUrl);
+	        }
+		});
+	</script>
+</head>
+<body class="left-sidebar">
+	<div id="preloader-loading" style="display: run-in"> 
+	 <div id="status-loading" style="display: run-in"> 
+		<div class="preloader-logo"></div>
+		<h3 class="center-text">划蒜小妹</h3> 
+		<p class="center-text smaller-text">稍等哟，小妹正在跳转!</p> 
+	 </div> 
+	</div>
+</body>
+</html>

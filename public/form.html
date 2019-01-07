@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0 minimal-ui" /> 
+	<meta name="apple-mobile-web-app-capable" content="yes" /> 
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
+	<link rel="shortcut icon" href="https://www.enableds.com/products/promobile/images/splash/favicon.ico" type="image/x-icon" /> 
+	<title>划蒜小妹</title> 
+	<link href="./css/style.css" rel="stylesheet" type="text/css" /> 
+	<link href="./css/framework.css" rel="stylesheet" type="text/css" /> 
+	<link href="./css/font-awesome.css" rel="stylesheet" type="text/css" /> 
+	<link href="./css/animate.css" rel="stylesheet" type="text/css" /> 
+	<script type="text/javascript" src="./js/jquery.js"></script> 
+	<script type="text/javascript" src="./js/jqueryui.js"></script> 
+	<script type="text/javascript" src="./js/framework-plugins.js"></script> 
+	<script type="text/javascript" src="./js/custom.js"></script>
+	<script type="text/javascript" >
+		$(document).ready(function(){
+			//获取url中的参数
+	        function getUrlParam(name) {
+	            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+	            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+	            if (r != null) return unescape(r[2]); return null; //返回参数值
+	        }
+
+	        var paramOpenId = getUrlParam('openId');
+
+	        $("#textOpenId").attr("value", paramOpenId);
+
+	        $("#btn_submit").click(function() {
+	        	console.log('submit click');
+
+	        	var buyerName = $("#input_buyerName").val();
+	        	var loginId = $("#input_loginId").val();
+
+	        	// 提交用户信息
+	        	var postData = {
+					"payerLoginId" : loginId,
+					"buyerName" : buyerName,
+					"openId" : paramOpenId
+				};
+
+				var postUrl = "https://leancloud.cn/1.1/functions/alipay_bot_submit_user_info";
+			
+			    $.ajax({
+                    url: postUrl,
+                    type: 'post',
+                    dataType: 'json',
+                    data: JSON.stringify(postData),
+                    cache: false,
+                    headers: { 
+                    	'X-LC-Id' : 'BxGnacODP6tVhw0s4NOlt4J3-gzGzoHsz',
+						'X-LC-Key' : 'WPB91WUK9OKAJu0uyYGPymlQ',
+                        'Content-Type': 'application/json'
+                    },                
+                    success: function(res){
+                        if (res.code === 200) {
+                            
+                        }
+                    },
+                    error: function(e) {
+ 
+                    }
+                });
+	        });
+	        
+		});
+	</script>
+</head>
+<body class="left-sidebar">
+	<div id="preloader" style="display: none;"> 
+	 <div id="status" style="display: none;"> 
+		<div class="preloader-logo"></div> 
+		<h3 class="center-text">Welcome</h3> 
+		<p class="center-text smaller-text"> We're loading the content, give us a second. This won't take long! </p> 
+	 </div> 
+	</div>
+	<div class="gallery-fix"></div> 
+	<div id="header-fixed" class="header-style-1"> 
+		<a class="header-logo"><img src="./pic/logo-dark2.png" alt="img" /></a> 
+	</div>
+	<div class="snap-drawers">
+		<div id="content" class="snap-content" style="overflow-y: hidden;">
+			<div class="content" style="padding-left: 20px; padding-right: 20px;">
+				<div class="header-clear"></div>
+				<div class="page-login full-bottom">
+					<a href="#" class="page-login-logo"></a>
+					<div class="login-input">
+						<input id="input_buyerName" onfocus="if (this.value=='真实姓名') this.value = ''" onblur="if (this.value=='') this.value = '真实姓名'" type="text" value="真实姓名">
+					</div>
+					<div class="login-mail">
+						<input id="input_loginId" onfocus="if (this.value=='支付宝登陆账号') this.value = ''" onblur="if (this.value=='') this.value = '支付宝登陆账号'" type="text" value="支付宝登陆账号">
+					</div>
+					<input type="hidden" id="textOpenId" value="">
+					<a href="#" id="btn_submit" class="login-button button button-small button-round button-green button-fullscreen full-bottom">提交</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

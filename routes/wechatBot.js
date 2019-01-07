@@ -11,39 +11,46 @@ var WechatAPI = require('wechat-api');
 var api = new WechatAPI('wxbddcd6c3310fca44',
   'e9b0494000e8ad5759a6fb58e2c8f8ac');
 
+var AV = require('leanengine');
+
 router.use('/', wechat(config).text(function(message, req, res, next) {
   // message为文本内容
+  // ToUserName: 'gh_9a2b74fa87e8', 微信openID
   // FromUserName: 'oPKu7jgOibOA-De4u8J2RuNKpZRw',
   // CreateTime: '1359125035',
   // MsgType: 'text',
   // Content: 'http',
   // MsgId: '5837397576500011341' }
-  var keyArray = ['你好', '约吗'];
+
+  console.log('in wechatBot');
+  console.log(JSON.stringify(message));
+
+  var keyArray = ['帮助', '支付宝', '红包', '支付宝红包'];
   var content = message.Content;
   var keyIndex = keyArray.indexOf(content);
   switch (keyIndex) {
     case 0:
-      {
-        res.reply({
-          type: "text",
-          content: '您好，大家好才是真的好！'
-        });
-
-      }
-      break;
     case 1:
+    case 2:
+    case 3:
       {
+        // 微信消息框一行13个汉字
+        var urlStr = "http://huasuan.leanapp.cn?openId=" + message.ToUserName;
         res.reply({
           type: "text",
-          content: '不约，不约，叔叔我们不约！'
+          content:'欢迎来撩划蒜小妹!\n'+
+                  '快把支付宝付款红包转余额!\n'+
+                  '---------------------------\n'+
+                  '支付宝首页搜"641571270"\n'+
+                  '复制链接并用浏览器打开\n'+
+                  '专属链接:<a href="' + urlStr + '">长按复制</a>\n'
         });
-
       }
       break;
     default:
       res.reply({
         type: "text",
-        content: '服务器挂掉了，你的要求暂时无法满足……'
+        content: '回复"帮助"可以获取专属福利链接噢'
       });
       break;
   }

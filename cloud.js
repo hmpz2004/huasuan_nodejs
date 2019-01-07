@@ -118,8 +118,8 @@ AV.Cloud.define('alipay_bot_submit_user_info', function(request) {
             var buyerInfoObj = new BuyerInfo();
             buyerInfoObj.set('payerLoginId', para.payerLoginId);
             buyerInfoObj.set('buyerName', para.buyerName);
-            if (para.tsId) {
-                buyerInfoObj.set('tsId', para.tsId);
+            if (para.openId) {
+                buyerInfoObj.set('wechatOpenId', para.openId);
             }
             
             buyerInfoObj.save().then(function (res) {
@@ -393,7 +393,7 @@ AV.Cloud.define('alipay_bot_submit_withdraw', function(request) {
 });
 
 AV.Cloud.define('alipay_bot_index', function(request) {
-      var params = request.params;
+    var params = request.params;
     
     
     var curTimestamp = new Date().getTime();
@@ -452,4 +452,54 @@ AV.Cloud.define('alipay_bot_index', function(request) {
             console.log('query BuyerInfo.tsId got error ' + error);
         });
     }
+});
+
+AV.Cloud.define('alipay_bot_index_wx', function(request) {
+    var params = request.params;
+    
+    var paramOpenId = params.openId;
+
+    if (!paramOpenId) {
+        // 参数有误
+        var resObj = {
+            statusCode : 102,
+            msg : "没有传入openId参数"
+        };
+        return resObj;
+    }
+
+    // 当前用户的url带了openId字段上来
+    // 根据openId查询用户loginId和真实姓名，返回至网页
+    
+    var resObj = {
+        statusCode : 0, // 代表没有错误
+        msg : "",
+        payerLoginId : "",
+        buyerName : "",
+        balance : ""
+    };
+    
+    var queryBuyerInfo = new AV.Query('BuyerInfo');
+    queryBuyerInfo.equalTo('wechatOpenId', paramOpenId);
+    return queryBuyerInfo.find().then(function (results) {
+        if (!results || results.length === 0) {
+            console.log('query BuyerInfo.wechatOpenId got null');
+            resObj.statusCode = 103;
+            resObj.msg = "没有查到openId对应的用户信息";
+            resObj.openId = "";
+            return resObj;
+        }
+        var targetBuyerInfo = results[0];
+        var payerLoginIdInRec = targetBuyerInfo.get('payerLoginId');
+        var balanceInRec = targetBuyerInfo.get('Balance');
+        var buyerNameInRec = targetBuyerInfo.get('buyerName');
+        
+        resObj.payerLoginId = payerLoginIdInRec;
+        resObj.buyerName = buyerNameInRec;
+        resObj.balance = balanceInRec;
+        
+        return resObj;
+    }, function(error) {
+        console.log('query BuyerInfo.wechatOpenId got error ' + error);
+    });
 });
