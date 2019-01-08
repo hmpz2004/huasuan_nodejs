@@ -35,7 +35,7 @@ router.use('/', wechat(config).text(function(message, req, res, next) {
     case 3:
       {
         // 微信消息框一行13个汉字
-        var urlStr = "http://huasuan.leanapp.cn?openId=" + message.ToUserName;
+        var urlStr = "http://huasuan.leanapp.cn?openId=" + message.FromUserName;
         res.reply({
           type: "text",
           content:'欢迎来撩划蒜小妹!\n'+

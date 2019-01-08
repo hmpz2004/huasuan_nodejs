@@ -34,11 +34,13 @@
 	        	var buyerName = $("#input_buyerName").val();
 	        	var loginId = $("#input_loginId").val();
 
+	        	var postOpenId = $("#textOpenId").val();
+
 	        	// 提交用户信息
 	        	var postData = {
 					"payerLoginId" : loginId,
 					"buyerName" : buyerName,
-					"openId" : paramOpenId
+					"openId" : postOpenId
 				};
 
 				var postUrl = "https://leancloud.cn/1.1/functions/alipay_bot_submit_user_info";
@@ -55,9 +57,13 @@
                         'Content-Type': 'application/json'
                     },                
                     success: function(res){
-                        if (res.code === 200) {
-                            
-                        }
+                    	if (res.result) {
+	                    	if (res.result.statusCode !== 0) {
+	                    	} else if (res.result.statusCode === 0) {
+	                    		// 正常返回 -> profile页面
+	                    		$(location).prop('href', 'profile.html?openId=' + postOpenId);
+	                    	}
+	                    }
                     },
                     error: function(e) {
  
@@ -78,7 +84,7 @@
 	</div>
 	<div class="gallery-fix"></div> 
 	<div id="header-fixed" class="header-style-1"> 
-		<a class="header-logo"><img src="./pic/logo-dark2.png" alt="img" /></a> 
+		<a class="header-logo"><img src="./pic/logo_title.png" alt="img" /></a> 
 	</div>
 	<div class="snap-drawers">
 		<div id="content" class="snap-content" style="overflow-y: hidden;">

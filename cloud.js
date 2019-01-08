@@ -89,30 +89,46 @@ AV.Cloud.define('trans_dec', function(request) {
 AV.Cloud.define('alipay_bot_submit_user_info', function(request) {
     var para = request.params;
     
+    var paramOpenId = para.openId;
+
     var BuyerInfo = AV.Object.extend('BuyerInfo');
     
-    // 先根据payerLoginId查下是否已经有账户了
+    // 先根据openId查下是否已经有账户了
     var queryBuyerInfo = new AV.Query('BuyerInfo');
-    queryBuyerInfo.equalTo('payerLoginId', para.payerLoginId);
-    queryBuyerInfo.find().then(function (results) {
+    queryBuyerInfo.equalTo('openId', paramOpenId);
+    return queryBuyerInfo.find().then(function (results) {
         if (results && results.length !== 0) {
-            // 已经存在数据
+            // 已经存在数据 -> 更新覆盖个别字段
             let len = results.length;
             let oldRec = results[0];
             let oid = oldRec.id;
-            console.log('query BuyerInfo.payerLoginId ' + para.payerLoginId + ' result id ' + oid);
+            console.log('query BuyerInfo.openId ' + paramOpenId + ' result id ' + oid);
             let needSave = false;
+            if (param.payerLoginId) {
+                needSave = true;
+                oldRec.set('payerLoginId', para.payerLoginId);
+            }
             if (para.buyerName) {
                 needSave = true;
                 oldRec.set('buyerName', para.buyerName);
             }
             if (needSave) {
-                oldRec.save().then(function (res) {
+                return oldRec.save().then(function (res) {
                     console.log('updated BuyerInfo ' + oid);
+                    var resObj = {
+                        statusCode : 0
+                    }
+                    return resObj;
                 }, function (error) {
                     console.error('updated BuyerInfo ' + oid + ' ' + error);
                 });
             }
+
+            // 理论上走不到这
+            var resObj = {
+                statusCode : 0
+            }
+            return resObj;
         } else {
             // 不存在该数据，可以插入
             var buyerInfoObj = new BuyerInfo();
@@ -122,8 +138,12 @@ AV.Cloud.define('alipay_bot_submit_user_info', function(request) {
                 buyerInfoObj.set('wechatOpenId', para.openId);
             }
             
-            buyerInfoObj.save().then(function (res) {
+            return buyerInfoObj.save().then(function (res) {
                 console.log('objectId is ' + res.id);
+                var resObj = {
+                    statusCode : 0
+                }
+                return resObj;
             }, function (error) {
                 console.error(error);
             });
@@ -131,11 +151,6 @@ AV.Cloud.define('alipay_bot_submit_user_info', function(request) {
     }, function (error) {
         console.error('query BuyerInfo.payerLoginId error ' + error);
     });
-    
-    var resObj = {
-        statusCode : 0,
-        tsId : para.tsId
-    }
 });
 
 AV.Cloud.define('alipay_bot_submit_biz_callback', function(request) {
@@ -356,7 +371,7 @@ AV.Cloud.define('alipay_bot_submit_withdraw', function(request) {
         var balanceInRec = targetBuyerInfo.get('Balance');
         console.log(payerLoginIdInRec + ' ' + balanceInRec);
         
-        if (amount < balanceInRec) {
+        if (amount <= balanceInRec) {
             // 提现金额小于余额，可以直接提现
             // 减法要特殊处理，否则出现一长串小数
             var newBalance = parseFloat(subFunc(balanceInRec, amount));

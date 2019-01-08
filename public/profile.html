@@ -1,20 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+ <head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0 minimal-ui" /> 
 	<meta name="apple-mobile-web-app-capable" content="yes" /> 
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
-	<link rel="shortcut icon" href="https://www.enableds.com/products/promobile/images/splash/favicon.ico" type="image/x-icon" /> 
-	<title>划蒜小妹</title>
-	<script type="text/javascript" src="./js/jquery.js"></script> 
-	<script type="text/javascript" src="./js/jqueryui.js"></script> 
-	<!-- <script type="text/javascript" src="./js/framework-plugins.js"></script>  -->
-	<!-- <script type="text/javascript" src="./js/custom.js"></script> -->
-	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" /> 
-	<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
-	
+	<link rel="icon" type="image/png" href="images/splash/android-chrome-192x192.png" sizes="192x192" /> 
+	<link rel="apple-touch-icon" sizes="196x196" href="images/splash/apple-touch-icon-196x196.png" /> 
+	<link rel="apple-touch-icon" sizes="180x180" href="images/splash/apple-touch-icon-180x180.png" /> 
+	<link rel="apple-touch-icon" sizes="152x152" href="images/splash/apple-touch-icon-152x152.png" /> 
+	<link rel="apple-touch-icon" sizes="144x144" href="images/splash/apple-touch-icon-144x144.png" /> 
+	<link rel="apple-touch-icon" sizes="120x120" href="images/splash/apple-touch-icon-120x120.png" /> 
+	<link rel="apple-touch-icon" sizes="114x114" href="images/splash/apple-touch-icon-114x114.png" /> 
+	<link rel="apple-touch-icon" sizes="76x76" href="images/splash/apple-touch-icon-76x76.png" /> 
+	<link rel="apple-touch-icon" sizes="72x72" href="images/splash/apple-touch-icon-72x72.png" /> 
+	<link rel="apple-touch-icon" sizes="60x60" href="images/splash/apple-touch-icon-60x60.png" /> 
+	<link rel="apple-touch-icon" sizes="57x57" href="images/splash/apple-touch-icon-57x57.png" /> 
+	<link rel="icon" type="image/png" href="images/splash/favicon-96x96.png" sizes="96x96" /> 
+	<link rel="icon" type="image/png" href="images/splash/favicon-32x32.png" sizes="32x32" /> 
+	<link rel="icon" type="image/png" href="images/splash/favicon-16x16.png" sizes="16x16" /> 
+	<link rel="shortcut icon" href="images/splash/favicon.ico" type="image/x-icon" /> 
+	<title>划蒜小妹</title> 
+	<link href="css/style.css" rel="stylesheet" type="text/css" /> 
+	<link href="css/framework.css" rel="stylesheet" type="text/css" /> 
+	<link href="css/font-awesome.css" rel="stylesheet" type="text/css" /> 
+	<link href="css/animate.css" rel="stylesheet" type="text/css" /> 
+	<script type="text/javascript" src="js/jquery.js"></script> 
+	<script type="text/javascript" src="js/jqueryui.js"></script> 
+	<script type="text/javascript" src="js/framework-plugins.js"></script> 
+	<script type="text/javascript" src="js/custom.js"></script> 
 	<script type="text/javascript" >
 		$(document).ready(function(){
 
@@ -59,8 +73,10 @@
 
                     		// 设置页面的几个值
                     		$("#h3_balance").text("余额 : " + balance + "￥");
-                    		$("#em_payerLoginId").attr("value", payerLoginId);
-                    		$("#em_buyerName").attr("value", buyerName);
+                    		// $("#em_payerLoginId").attr("value", payerLoginId);
+                    		$("#em_payerLoginId").text(payerLoginId);
+                    		// $("#em_buyerName").attr("value", buyerName);
+                    		$("#em_buyerName").text(buyerName);
                     		$("#textOpenId").attr("value", paramOpenId);
                     	}
                     }
@@ -76,15 +92,17 @@
 				// 跳转至支付宝app页面付款
 				var curTs = new Date().getTime();
 				var alipayChargeUrl = "https://qr.alipay.com/fkx066114rhlthuaapq1gf8?t=" + curTs;
-				$(location).prop('href', alipayChargeUrl);
+				// $(location).prop('href', alipayChargeUrl);
+
+				$("#id_hidden_iframe").attr("src", alipayChargeUrl);
 			});
 			
-			$("#a_withdraw").click(function(){
+			$("#a_submit_withdraw").click(function(){
 				console.log('click a_submit_withdraw');
 				var amount = $("#text_withdraw_amount").val();
 				
-				var payerLoginId = $("#em_payerLoginId").val();
-				var buyerName = $("#em_buyerName").val();
+				var payerLoginId = $("#em_payerLoginId").text();
+				var buyerName = $("#em_buyerName").text();
 
 				var postData = {
 					"payerLoginId" : payerLoginId,
@@ -117,73 +135,130 @@
 			});
 		});
 	</script>
-</head>
-<body>
-	<div class="container">
-		<div class="row clearfix">
-			<div class="col-md-12 column">
-				<h3 id="h3_balance"></h3>
-				<form role="form" class="form-inline">
-					<div class="form-group">
-						 <label for="em_payerLoginId">支付宝登录名</label>
-						 <input type="text" class="form-control" id="em_payerLoginId" />
-						 <input type="hidden" id="textOpenId" value="">
-					</div>
-					<div class="form-group">
-						 <label for="em_buyerName">姓名</label>
-						 <input type="text" class="form-control" id="em_buyerName" />
-					</div>
-					<div class="form-group">
-						 <label for="text_withdraw_amount">提现金额</label>
-						 <input type="number" class="form-control" id="text_withdraw_amount" />
-					</div>
-				</form>
-				<div class="row clearfix">
-					<div class="col-md-6 column">
-						 <button type="button" id="a_charge" class="btn btn-default btn-danger">充值</button>
-					</div>
-					<div class="col-md-6 column">
-						 <button type="button" id="a_withdraw" class="btn btn-default btn-success">提现</button>
-					</div>
+ </head> 
+ <body> 
+	<div id="preloader"> 
+	 <div id="status"> 
+		<div class="preloader-logo"></div> 
+		<h3 class="center-text">划蒜小妹</h3> 
+		<p class="center-text smaller-text">加载中，请稍等噢！</p> 
+	 </div> 
+	</div> 
+	<div class="gallery-fix"></div> 
+	<div id="header-fixed" class="header-style-1"> 
+	 <a class="header-logo" href="#"><img src="pic/logo_title.png" alt="img" /></a> 
+	</div> 
+	<div class="all-elements"> 
+	 <div class="snap-drawers"> 
+		<div id="content" class="snap-content"> 
+		 <div class="content"> 
+			<div class="header-clear"></div> 
+			<div class="page-profile"> 
+			 <div class="page-profile-header container-fullscreen" style="background-image: url(./pic/zhifubao_profile_bg.jpg);"> 
+				<h3 id="em_payerLoginId">支付宝</h3>
+				<h3 id="em_buyerName">姓名</h3>
+				<h3 id="h3_balance">余额: 0.00￥</h3>
+				<input type="hidden" id="textOpenId" value="">
+				<div class="overlay" style="background-color: #bbbbbb00"></div> 
+				<div class="follow-buttons"> 
+					<a href="#" id="a_charge">充值</a>
+					<a href="#" class="simple-modal" id="a_withdraw">提现</a>
+				</div> 
+				<div class="simple-modal-content modal-content rounded-modal">
+					<img src="./pic/withdraw.png" alt="img" class="responsive-image">
+					<h4>请输入提现金额</h4>
+					<input class="text-field red-field" id="text_withdraw_amount" type="number" style="max-width: 400px;" value="">
+					<a href="#" class="button button-green button-round button-center" id="a_submit_withdraw">提交</a>
+					<a href="#" class="button button-red button-small button-round round-button modal-close button-center">取消</a>
 				</div>
-			</div>
-		</div>
-		<div class="row clearfix">
-			<div class="col-md-12 column">
-				<div class="page-header">
-					<h1>
-						<small>使用说明</small>
-					</h1>
+			 </div> 
+			 <div class="decoration"></div> 
+			 <div class="container">
+			 	<div class="one-half-responsive">
+					<h5>1.长按复制"专属链接"，并在浏览器中打开</h5>
+					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_1.png" src="./pic/step_tip_1.png" style="display: block;">
 				</div>
-				<ol>
-					<li>
+			 </div> 
+			 <div class="container no-bottom">
+				<div class="container-fullscreen heading-style-3 bg-4" style="background-image: url(https://www.enableds.com/products/promobile/images/pictures/3.jpg); margin-left: -21px; width: 620px;">
+					<h3 class="heading-title">使用说明</h3>
+					<em class="heading-subtitle">按照图示方法操作</em>
+					<div class="overlay bg-black"></div>
+				</div>
+				<div class="one-half">
+					<h5>1/4</h5>
+					<img class="preload-image responsive-image half-bottom" data-original="./pic/alipay_index.jpeg" src="images/pictures/1w.jpg" style="display: block;">
+					<p>
 						打开支付宝APP首页，在搜索框输入 641571270 领取红包
-					</li>
-					<li>
-						返回本页面点击充值，输入比红包大的一个充值金额，完成支付宝内的付款
-					</li>
-					<li>
-						返回本页面并刷新，点击提现，1分钟以内会受到本站的现金转账
-					</li>
-				</ol>
-			</div>
-		</div>
-		<div class="row clearfix">
-			<div class="col-md-12 column">
-				<div class="page-header">
-					<h1>
-						<small>其他事项</small>
-					</h1>
+					</p>
 				</div>
-				<ol>
-					<li>提现通常1-2分钟即可到账，超过15分钟未到账请联系划蒜小客服</li>
-					<li>一切转账操作结果及提现到账结果以支付宝官方APP的记录为准</li>
-					<li>充值不限次数，但提现每天最多3次</li>
-					<li>单次提现金额超过100元需要人工审核</li>
-					<li>禁止使用本服务恶意套现</li>
-				</ol>
+				<div class="one-half last-column">
+					<h5>2/4</h5>
+					<img class="preload-image responsive-image half-bottom" data-original="./pic/1ww.jpg" src="images/pictures/2w.jpg" style="display: block;">
+					<p>
+						返回本页面点击充值，输入比红包大的一个充值金额，完成支付宝内的付款
+					</p>
+				</div>
+				<div class="one-half">
+					<h5>3/4</h5>
+					<img class="preload-image responsive-image half-bottom" data-original="./pic/1ww.jpg" src="images/pictures/1w.jpg" style="display: block;">
+					<p>
+						返回本页面并刷新，点击提现，1分钟以内会收到本站的支付宝转账
+					</p>
+				</div>
+				<div class="one-half last-column">
+					<h5>4/4</h5>
+					<img class="preload-image responsive-image half-bottom" data-original="./pic/1ww.jpg" src="images/pictures/2w.jpg" style="display: block;">
+					<p>
+					This column is half the size of the screen, and will stay this way on mobile and tablets.
+					</p>
+				</div>
+				<div class="decoration"></div>
+				<div class="container-fullscreen heading-style-3 bg-4" style="margin-left: -21px; width: 620px;">
+					<h3 class="heading-title">其他说明</h3>
+					<em class="heading-subtitle">使用协议</em>
+					<div class="overlay bg-black"></div>
+				</div>
 			</div>
-		</div>
+			<div class="container">
+				<div class="one-third-responsive">
+					<ol>
+						<li>提现通常1-2分钟即可到账，超过15分钟未到账请联系划蒜小客服</li>
+						<li>一切转账操作结果及提现到账结果以支付宝官方APP的记录为准</li>
+						<li>充值不限次数，但提现每天最多3次</li>
+						<li>单次提现金额超过100元需要人工审核</li>
+						<li>禁止使用本服务恶意套现</li>
+					</ol>
+				</div>
+			</div>
+			 <div class="decoration"></div> 
+			 <div class="footer"> 
+				<p class="center-text">Copyright 2019. All rights reserved.</p> 
+				<iframe id="id_hidden_iframe" src="" style="visibility: hidden; height: 0px; width: 0px"></iframe>
+			 </div> 
+			</div> 
+		 </div> 
+		</div> 
+		<a href="#" class="back-to-top-badge">返回页面顶部</a> 
+	 </div> 
+	 <div class="top-notification-1 top-notification bg-blue-dark"> 
+		<h4>Did you know?</h4> 
+		<p> Easy way to make sure your messages get read! </p> 
+		<a href="#" class="close-top-notification"><i class="fa fa-times"></i></a> 
+	 </div> 
+	 <div class="bottom-notification-1 bottom-notification bg-green-dark"> 
+		<h4>Did you know?</h4> 
+		<p> Easy way to make sure your messages get read! </p> 
+		<a href="#" class="close-bottom-notification"><i class="fa fa-times"></i></a> 
+	 </div> 
+	 <div class="bottom-notification-2 bottom-notification bg-orange-dark timeout-notification"> 
+		<h4>Timeout: 5 Seconds</h4> 
+		<p> I'll go away on my own after a few seconds! </p> 
+	 </div> 
+	 <div class="top-notification-2 top-notification bg-red-dark timeout-notification"> 
+		<h4>Timeout: 5 Seconds</h4> 
+		<p> I'll go away on my own after a few seconds! </p> 
+	 </div>	
 	</div>
-</body>
+ </body>
 </html>
