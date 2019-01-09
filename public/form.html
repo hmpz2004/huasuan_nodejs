@@ -33,6 +33,10 @@
 
 	        	var buyerName = $("#input_buyerName").val();
 	        	var loginId = $("#input_loginId").val();
+	        	if (buyerName === '' or loginId === '') {
+	        		console.log('请输入正确的账号及姓名信息');
+	        		return;
+	        	}
 
 	        	var postOpenId = $("#textOpenId").val();
 
@@ -90,13 +94,22 @@
 		<div id="content" class="snap-content" style="overflow-y: hidden;">
 			<div class="content" style="padding-left: 20px; padding-right: 20px;">
 				<div class="header-clear"></div>
+				<div class="decoration"></div>
+				<div class="container">
+					<div class="one-third-responsive full-bottom">
+						<h5>请先完成第一步哟</h5>
+						<p>
+							申请提现时，本小妹需要您的支付宝账号和真实姓名才能顺利完成转账，所以要确认输入无误。
+							提交后就可以来领红包并且提现到余额啦！
+						</p>
+					</div>
+				</div>
 				<div class="page-login full-bottom">
-					<a href="#" class="page-login-logo"></a>
 					<div class="login-input">
-						<input id="input_buyerName" onfocus="if (this.value=='真实姓名') this.value = ''" onblur="if (this.value=='') this.value = '真实姓名'" type="text" value="真实姓名">
+						<input id="input_loginId" onfocus="if (this.value=='支付宝登陆账号') this.value = ''" onblur="if (this.value=='') this.value = '支付宝登陆账号'" type="text" value="支付宝登陆账号">
 					</div>
 					<div class="login-mail">
-						<input id="input_loginId" onfocus="if (this.value=='支付宝登陆账号') this.value = ''" onblur="if (this.value=='') this.value = '支付宝登陆账号'" type="text" value="支付宝登陆账号">
+						<input id="input_buyerName" onfocus="if (this.value=='真实姓名') this.value = ''" onblur="if (this.value=='') this.value = '真实姓名'" type="text" value="真实姓名">
 					</div>
 					<input type="hidden" id="textOpenId" value="">
 					<a href="#" id="btn_submit" class="login-button button button-small button-round button-green button-fullscreen full-bottom">提交</a>
