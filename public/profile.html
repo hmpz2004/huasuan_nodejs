@@ -20,7 +20,7 @@
 	<link rel="icon" type="image/png" href="images/splash/favicon-32x32.png" sizes="32x32" /> 
 	<link rel="icon" type="image/png" href="images/splash/favicon-16x16.png" sizes="16x16" /> 
 	<link rel="shortcut icon" href="images/splash/favicon.ico" type="image/x-icon" /> 
-	<title>划蒜小妹</title> 
+	<title>充值完成后记得刷新本页面哟</title> 
 	<link href="css/style.css" rel="stylesheet" type="text/css" /> 
 	<link href="css/framework.css" rel="stylesheet" type="text/css" /> 
 	<link href="css/font-awesome.css" rel="stylesheet" type="text/css" /> 
@@ -96,10 +96,26 @@
 
 				$("#id_hidden_iframe").attr("src", alipayChargeUrl);
 			});
+
+			// 更正账号的跳转
+			$("#id_modify_account_info").click(function(){
+				$(location).prop('href', 'form.html?openId=' + paramOpenId);
+			});
 			
 			$("#a_submit_withdraw").click(function(){
-				console.log('click a_submit_withdraw');
 				var amount = $("#text_withdraw_amount").val();
+				if (amount === '') {
+					return;
+				}
+				// var amountValue = parseFloat(amount);
+				// if (amountValue <=0) {
+				// 	// 提现0元或-
+				// 	$("#noti_withdraw_error")[0].click();
+				// 	return;
+				// }
+
+				// 提现提交成功 -> 弹出tip通知
+                // $("#noti_withdraw_submitted")[0].click();
 				
 				var payerLoginId = $("#em_payerLoginId").text();
 				var buyerName = $("#em_buyerName").text();
@@ -124,9 +140,6 @@
                         'Content-Type': 'application/json'
                     },                
                     success: function(res){
-                        if (res.code === 200) {
-                            
-                        }
                     },
                     error: function(e) {
  
@@ -155,9 +168,9 @@
 			<div class="header-clear"></div> 
 			<div class="page-profile"> 
 			 <div class="page-profile-header container-fullscreen" style="background-image: url(./pic/zhifubao_profile_bg.jpg);"> 
-				<h3 id="em_payerLoginId">支付宝</h3>
-				<h3 id="em_buyerName">姓名</h3>
-				<h3 id="h3_balance">余额: 0.00￥</h3>
+				<h3 id="em_payerLoginId">153269@qq.com</h3>
+				<h3 id="em_buyerName">张脆瓜</h3>
+				<h3 id="h3_balance">余额: 12.00￥</h3>
 				<input type="hidden" id="textOpenId" value="">
 				<div class="overlay" style="background-color: #bbbbbb00"></div> 
 				<div class="follow-buttons"> 
@@ -170,7 +183,7 @@
 						<div class="one-third-responsive full-bottom" align="center">
 							<h4>请输入提现金额</h4>
 							<input class="text-field red-field" id="text_withdraw_amount" type="number" style="max-width: 120px;" value="">
-							<a href="#" class="button button-green button-round button-center modal-close" id="a_submit_withdraw">提交</a>
+							<a href="#" class="button button-green button-round button-center modal-close show-bottom-notification-2 timer-notification" id="a_submit_withdraw">提交</a>
 							<!-- <a href="#" class="button button-red button-small button-round round-button modal-close button-center">取消</a> -->
 						</div>
 					</div>
@@ -178,22 +191,33 @@
 			 </div> 
 			 <div class="decoration"></div> 
 			 <div class="container">
-			 	<p><h3>使用说明</h3><h5>(领红包 -> 花红包 -> 提现红包)</h5></p>
+			 	<div class="container heading-style-4">
+			 		<h3>红包码 641571270</h3>
+			 		<h3>使用说明</h3>
+				 	<div class="line bg-red-dark"></div>
+				 	<p class="heading-subtitle">
+						领红包 -> 花红包 -> 提现红包
+					</p>
+			 	</div>
 			 	<div class="one-half-responsive">
-					<h5>1.长按复制"专属链接"，并在浏览器中打开</h5>
+					<h5>1.长按蓝色"长按复制"后，点击复制链接，并在浏览器中打开</h5>
 					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_1.png" src="./pic/step_tip_1.png" style="display: block;">
 				</div>
 				<div class="one-half-responsive">
-					<h5>打开支付宝APP首页，在搜索框输入 641571270 领取红包</h5>
-					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_1.png" src="./pic/step_tip_1.png" style="display: block;">
+					<h5>2.打开支付宝APP首页，点击搜索框</h5>
+					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_2.png" src="./pic/step_tip_2.png" style="display: block;">
 				</div>
 				<div class="one-half-responsive">
-					<h5>返回本页面点击充值，输入比红包大的一个充值金额，完成支付宝内的付款</h5>
-					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_1.png" src="./pic/step_tip_1.png" style="display: block;">
+					<h5>3.输入 641571270 领取红包</h5>
+					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_3.png" src="./pic/step_tip_3.png" style="display: block;">
 				</div>
 				<div class="one-half-responsive">
-					<h5>返回本页面并刷新，点击提现，1分钟以内会收到本站的支付宝转账</h5>
-					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_1.png" src="./pic/step_tip_1.png" style="display: block;">
+					<h5>4.返回本页面点击充值，输入一个比红包大的充值金额</h5>
+					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_4.png" src="./pic/step_tip_4.png" style="display: block;">
+				</div>
+				<div class="one-half-responsive">
+					<h5>5.完成支付宝内的付款，返回本页面就可以提现啦</h5>
+					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_5.png" src="./pic/step_tip_5.png" style="display: block;">
 				</div>
 			 </div> 
 			 <div class="decoration"></div> 
@@ -201,7 +225,10 @@
 				<div class="one-third-responsive">
 					<p><h3 class="heading-title">其他说明</h3></p>
 					<ol>
-						<li>提现通常1-2分钟即可到账，超过15分钟未到账请联系划蒜小客服</li>
+						<li>返回本页面后建议先刷新一次，获取最新余额</li>
+						<li>提现通常1-2分钟即可到账，超过15分钟未到账请联系划蒜小客服(微信:huasuanxiaomei)</li>
+						<li>账号信息会直接影响提现功能，请确保填写正确的支付宝账号及真实姓名</li>
+						<li>若账号信息有误，请在此</li><a id="id_modify_account_info" href='#'>更正账号信息</a>
 						<li>一切转账操作结果及提现到账结果以支付宝官方APP的记录为准</li>
 						<li>充值不限次数，但提现每天最多3次</li>
 						<li>单次提现金额超过100元需要人工审核</li>
@@ -211,6 +238,8 @@
 			</div>
 			 <div class="decoration"></div> 
 			 <div class="footer"> 
+			 	<!-- <a id="noti_withdraw_submitted" class="show-bottom-notification-2 timer-notification" href="#">.</a>
+			 	<a id="noti_withdraw_error" class="show-bottom-notification-1 timer-notification" href="#">.</a> -->
 				<p class="center-text">Copyright 2019. All rights reserved.</p> 
 				<iframe id="id_hidden_iframe" src="" style="visibility: hidden; height: 0px; width: 0px"></iframe>
 			 </div> 
@@ -219,19 +248,20 @@
 		</div> 
 		<a href="#" class="back-to-top-badge">返回页面顶部</a> 
 	 </div> 
+
 	 <div class="top-notification-1 top-notification bg-blue-dark"> 
 		<h4>Did you know?</h4> 
 		<p> Easy way to make sure your messages get read! </p> 
 		<a href="#" class="close-top-notification"><i class="fa fa-times"></i></a> 
 	 </div> 
-	 <div class="bottom-notification-1 bottom-notification bg-green-dark"> 
-		<h4>Did you know?</h4> 
-		<p> Easy way to make sure your messages get read! </p> 
+	 <div class="bottom-notification-1 bottom-notification bg-red-dark"> 
+		<h4>提现遇到问题</h4> 
+		<p>请重试</p> 
 		<a href="#" class="close-bottom-notification"><i class="fa fa-times"></i></a> 
 	 </div> 
-	 <div class="bottom-notification-2 bottom-notification bg-orange-dark timeout-notification"> 
-		<h4>Timeout: 5 Seconds</h4> 
-		<p> I'll go away on my own after a few seconds! </p> 
+	 <div class="bottom-notification-2 bottom-notification bg-green-dark timeout-notification"> 
+		<h4>申请已提交</h4> 
+		<p>通常一分钟内会到账</p>
 	 </div> 
 	 <div class="top-notification-2 top-notification bg-red-dark timeout-notification"> 
 		<h4>Timeout: 5 Seconds</h4> 

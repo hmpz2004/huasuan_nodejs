@@ -95,7 +95,7 @@ AV.Cloud.define('alipay_bot_submit_user_info', function(request) {
     
     // 先根据openId查下是否已经有账户了
     var queryBuyerInfo = new AV.Query('BuyerInfo');
-    queryBuyerInfo.equalTo('openId', paramOpenId);
+    queryBuyerInfo.equalTo('wechatOpenId', paramOpenId);
     return queryBuyerInfo.find().then(function (results) {
         if (results && results.length !== 0) {
             // 已经存在数据 -> 更新覆盖个别字段
@@ -104,7 +104,7 @@ AV.Cloud.define('alipay_bot_submit_user_info', function(request) {
             let oid = oldRec.id;
             console.log('query BuyerInfo.openId ' + paramOpenId + ' result id ' + oid);
             let needSave = false;
-            if (param.payerLoginId) {
+            if (para.payerLoginId) {
                 needSave = true;
                 oldRec.set('payerLoginId', para.payerLoginId);
             }
@@ -361,7 +361,7 @@ AV.Cloud.define('alipay_bot_submit_withdraw', function(request) {
     
     var queryBuyerInfo = new AV.Query('BuyerInfo');
     queryBuyerInfo.equalTo('payerLoginId', payerLoginId);
-    queryBuyerInfo.find().then(function (results) {
+    return queryBuyerInfo.find().then(function (results) {
         if (!results || results.length === 0) {
             console.log('query BuyerInfo.payerLoginId got null');
             return;
@@ -371,16 +371,12 @@ AV.Cloud.define('alipay_bot_submit_withdraw', function(request) {
         var balanceInRec = targetBuyerInfo.get('Balance');
         console.log(payerLoginIdInRec + ' ' + balanceInRec);
         
-        if (amount <= balanceInRec) {
+        if (amount <= balanceInRec && amount !== 0) {
             // 提现金额小于余额，可以直接提现
             // 减法要特殊处理，否则出现一长串小数
             var newBalance = parseFloat(subFunc(balanceInRec, amount));
             targetBuyerInfo.set('Balance', newBalance);
-            targetBuyerInfo.save().then(function(res) {
-                
-            },function(error) {
-                console.error(error);
-            });
+            targetBuyerInfo.save();
             
             // 新增一条交易记录
             var AlipayTransaction = AV.Object.extend('AlipayTransaction');
@@ -400,6 +396,11 @@ AV.Cloud.define('alipay_bot_submit_withdraw', function(request) {
                     money_amount: amount
                 }
             });
+
+            var resObj = {
+                statusCode : 0
+            };
+            return resObj;
         }
         
     }, function (error) {
@@ -493,6 +494,8 @@ AV.Cloud.define('alipay_bot_index_wx', function(request) {
         buyerName : "",
         balance : ""
     };
+
+    console.log('paramOpenId ' + paramOpenId);
     
     var queryBuyerInfo = new AV.Query('BuyerInfo');
     queryBuyerInfo.equalTo('wechatOpenId', paramOpenId);

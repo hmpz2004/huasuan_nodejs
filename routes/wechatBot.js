@@ -22,7 +22,7 @@ router.use('/', wechat(config).text(function(message, req, res, next) {
   // Content: 'http',
   // MsgId: '5837397576500011341' }
 
-  console.log('in wechatBot');
+  console.log('in wechatBot text');
   console.log(JSON.stringify(message));
 
   var keyArray = ['帮助', '支付宝', '红包', '支付宝红包'];
@@ -42,8 +42,10 @@ router.use('/', wechat(config).text(function(message, req, res, next) {
                   '快把支付宝付款红包转余额!\n'+
                   '---------------------------\n'+
                   '支付宝首页搜"641571270"\n'+
-                  '复制链接并用浏览器打开\n'+
-                  '专属链接:<a href="' + urlStr + '">长按复制</a>\n'
+                  '\n'+
+                  '\n'+
+                  '长按复制下方链接并用浏览器打开\n'+
+                  '<a href="' + urlStr + '">专属链接</a>\n'
         });
       }
       break;
@@ -127,6 +129,29 @@ router.use('/', wechat(config).text(function(message, req, res, next) {
   // Precision: '119.385040',
   // MsgId: '5837397520665436492' }
   // TODO
+  console.log('in wechatBot event');
+  console.log(JSON.stringify(message));
+
+  // 订阅 Event subscribe
+  // 取关 Event unsubscribe
+  if (message.Event === 'subscribe') {
+    // 微信消息框一行13个汉字
+    var urlStr = "http://huasuan.leanapp.cn?openId=" + message.FromUserName;
+    res.reply({
+      type: "text",
+      content:'欢迎来撩划蒜小妹!\n'+
+              '快把支付宝付款红包转余额!\n'+
+              '---------------------------\n'+
+              '支付宝首页搜"641571270"\n'+
+              '\n'+
+              '\n'+
+              '长按复制下方链接并用浏览器打开\n'+
+              '<a href="' + urlStr + '">专属链接</a>\n'
+    });
+  } else if (message.Event === 'unsubscribe') {
+
+  }
+
 }).device_text(function(message, req, res, next) {
   // message为设备文本消息内容
   // { ToUserName: 'gh_d3e07d51b513',
