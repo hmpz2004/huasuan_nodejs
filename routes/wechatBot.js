@@ -13,6 +13,23 @@ var api = new WechatAPI('wxbddcd6c3310fca44',
 
 var AV = require('leanengine');
 
+// 微信消息框一行13个汉字
+var templateMsg = '欢迎来撩划蒜小妹!\n'+
+                  '\n'+
+                  '\n'+
+                  '领了支付宝红包，懒得出门去花？\n'+
+                  '我能帮你把红包转到余额里\n'+
+                  '---------------------------\n'+
+                  // '支付宝首页搜"641571270"\n'+
+                  // '总共分两步\n'+
+                  '\n'+
+                  '\n'+
+                  '回复"红包",获取你的专属链接\n';
+                  // '\n'+
+                  // '\n'+
+                  // '长按复制链接，并用浏览器打开\n';
+                  // '<a href="' + urlStr + '">专属链接</a>\n'
+
 router.use('/', wechat(config).text(function(message, req, res, next) {
   // message为文本内容
   // ToUserName: 'gh_9a2b74fa87e8', 微信openID
@@ -30,22 +47,21 @@ router.use('/', wechat(config).text(function(message, req, res, next) {
   var keyIndex = keyArray.indexOf(content);
   switch (keyIndex) {
     case 0:
+      {
+        res.reply({
+          type: "text",
+          content:templateMsg
+        });
+      }
+      break;
     case 1:
     case 2:
     case 3:
       {
-        // 微信消息框一行13个汉字
-        var urlStr = "http://huasuan.leanapp.cn?openId=" + message.FromUserName;
+        var urlStr = "http://huasuan.leanapp.cn?openId=" + message.FromUserName + "&desc=-复制本条消息并用浏览器打开-";
         res.reply({
           type: "text",
-          content:'欢迎来撩划蒜小妹!\n'+
-                  '快把支付宝付款红包转余额!\n'+
-                  '---------------------------\n'+
-                  '支付宝首页搜"641571270"\n'+
-                  '\n'+
-                  '\n'+
-                  '长按复制下方链接并用浏览器打开\n'+
-                  '<a href="' + urlStr + '">专属链接</a>\n'
+          content:urlStr
         });
       }
       break;
@@ -135,18 +151,9 @@ router.use('/', wechat(config).text(function(message, req, res, next) {
   // 订阅 Event subscribe
   // 取关 Event unsubscribe
   if (message.Event === 'subscribe') {
-    // 微信消息框一行13个汉字
-    var urlStr = "http://huasuan.leanapp.cn?openId=" + message.FromUserName;
     res.reply({
       type: "text",
-      content:'欢迎来撩划蒜小妹!\n'+
-              '快把支付宝付款红包转余额!\n'+
-              '---------------------------\n'+
-              '支付宝首页搜"641571270"\n'+
-              '\n'+
-              '\n'+
-              '长按复制下方链接并用浏览器打开\n'+
-              '<a href="' + urlStr + '">专属链接</a>\n'
+      content:templateMsg
     });
   } else if (message.Event === 'unsubscribe') {
 
