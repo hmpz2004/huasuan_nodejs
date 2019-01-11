@@ -382,7 +382,7 @@ AV.Cloud.define('alipay_bot_submit_withdraw', function(request) {
             var AlipayTransaction = AV.Object.extend('AlipayTransaction');
             var transToSave = new AlipayTransaction();
             transToSave.set('payerLoginId', payerLoginId);
-            transToSave.set('buyerName', buyerName);
+            transToSave.set('buyerName', buyerName);    // 不带*的
             transToSave.set('transType', 'withdraw');
             transToSave.set('amount', amount);
             transToSave.set('Balance', newBalance);
@@ -393,6 +393,7 @@ AV.Cloud.define('alipay_bot_submit_withdraw', function(request) {
                 data: {
                     action: 'com.huasuan.leancloud.push_cmd_action',
                     account: payerLoginId,
+                    buyerName: buyerName,
                     money_amount: amount
                 }
             });
