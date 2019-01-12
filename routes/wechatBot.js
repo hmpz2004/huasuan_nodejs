@@ -58,7 +58,7 @@ router.use('/', wechat(config).text(function(message, req, res, next) {
     case 2:
     case 3:
       {
-        var urlStr = "http://huasuan.leanapp.cn?openId=" + message.FromUserName + "&desc=-复制本条消息并用浏览器打开-";
+        var urlStr = "http://huasuan.leanapp.cn?openId=" + message.FromUserName + "&desc=-复制这一整条消息并用浏览器打开(包括这一串汉字)-";
         res.reply({
           type: "text",
           content:urlStr

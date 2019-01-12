@@ -372,36 +372,63 @@ AV.Cloud.define('alipay_bot_submit_withdraw', function(request) {
         console.log(payerLoginIdInRec + ' ' + balanceInRec);
         
         if (amount <= balanceInRec && amount !== 0) {
-            // 提现金额小于余额，可以直接提现
-            // 减法要特殊处理，否则出现一长串小数
-            var newBalance = parseFloat(subFunc(balanceInRec, amount));
-            targetBuyerInfo.set('Balance', newBalance);
-            targetBuyerInfo.save();
-            
-            // 新增一条交易记录
-            var AlipayTransaction = AV.Object.extend('AlipayTransaction');
-            var transToSave = new AlipayTransaction();
-            transToSave.set('payerLoginId', payerLoginId);
-            transToSave.set('buyerName', buyerName);    // 不带*的
-            transToSave.set('transType', 'withdraw');
-            transToSave.set('amount', amount);
-            transToSave.set('Balance', newBalance);
-            transToSave.save();
-            
-            AV.Push.send({
-                channels: [ 'public' ],
-                data: {
-                    action: 'com.huasuan.leancloud.push_cmd_action',
-                    account: payerLoginId,
-                    buyerName: buyerName,
-                    money_amount: amount
-                }
-            });
+            // 提现金额小于余额，可以处理提现请求
 
-            var resObj = {
-                statusCode : 0
-            };
-            return resObj;
+            // 查一下此人今天提现是否超过3次
+            const tsTodayZero = new Date(new Date(new Date().toLocaleDateString()).getTime());  // 今天0点的时间戳
+            var transQuery3Times = new AV.Query('AlipayTransaction');
+            transQuery3Times.equalTo('transType', 'withdraw');
+            transQuery3Times.equalTo('payerLoginId', payerLoginId);
+            transQuery3Times.greaterThan('createdAt', tsTodayZero);
+            transQuery3Times.find().then(function(transResults) {
+                if (transResults) {
+                    
+                    //<<>>
+                    console.log(transResults.length);
+
+                    if (transResults.length >= 3) {
+                        // 提现次数已经超过3次 -> 不响应本次请求 TODO 后面加一个错误码
+                    } else {
+                        // 提现次数<3次 -> 可以提现
+
+                        // 先扣除余额
+                        // 减法要特殊处理，否则出现一长串小数
+                        var newBalance = parseFloat(subFunc(balanceInRec, amount));
+                        targetBuyerInfo.set('Balance', newBalance);
+                        targetBuyerInfo.save();
+                        
+                        // 新增一条交易记录
+                        var AlipayTransaction = AV.Object.extend('AlipayTransaction');
+                        var transToSave = new AlipayTransaction();
+                        transToSave.set('payerLoginId', payerLoginId);
+                        transToSave.set('buyerName', buyerName);    // 不带*的
+                        transToSave.set('transType', 'withdraw');
+                        transToSave.set('amount', amount);
+                        transToSave.set('Balance', newBalance);
+                        transToSave.save();
+                        
+                        AV.Push.send({
+                            channels: [ 'public' ],
+                            data: {
+                                action: 'com.huasuan.leancloud.push_cmd_action',
+                                account: payerLoginId,
+                                buyerName: buyerName,
+                                money_amount: amount
+                            }
+                        });
+
+                        var resObj = {
+                            statusCode : 0
+                        };
+                        return resObj;
+                    }
+                }
+            }, function (error) {
+
+            });
+        } else {
+            //TODO
+            // 提现金额大于余额，给页面返回个error code
         }
         
     }, function (error) {

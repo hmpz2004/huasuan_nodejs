@@ -117,6 +117,11 @@
 
 				// 提现提交成功 -> 弹出tip通知
                 // $("#noti_withdraw_submitted")[0].click();
+
+                // 小数点后只保留2位(该方法会四舍五入)
+                var amountFloat = parseFloat(amount);
+                amountFloat = amountFloat.toFixed(2);
+                amount = '' + amountFloat;
 				
 				var payerLoginId = $("#em_payerLoginId").text();
 				var buyerName = $("#em_buyerName").text();
@@ -209,24 +214,24 @@
 					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_2.png" src="./pic/step_tip_2.png" style="display: block;">
 				</div>
 				<div class="one-half-responsive">
-					<h5>2.输入 641571270 领取红包</h5>
+					<h5>2.输入 641571270 领取红包后，返回本网页</h5>
 					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_3.png" src="./pic/step_tip_3.png" style="display: block;">
 				</div>
 				<div class="one-half-responsive">
-					<h5>3.返回本页面，点击"充值"，输入一个比红包大的充值金额</h5>
+					<h5>3.点击"充值"，会自动跳转到支付宝</h5>
 					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_4.png" src="./pic/step_tip_4.png" style="display: block;">
 				</div>
 				<div class="one-half-responsive">
-					<h5>4.付款后，返回本页面</h5>
+					<h5>4.支付一个比红包大的金额，花掉红包</h5>
 					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_5.png" src="./pic/step_tip_5.png" style="display: block;">
 				</div>
 				<div class="one-half-responsive">
 					<h5>5.点击提现，输入提现金额</h5>
-					<!-- <img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_5.png" src="./pic/step_tip_5.png" style="display: block;"> -->
+					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_6.png" src="./pic/step_tip_6.png" style="display: block;">
 				</div>
 				<div class="one-half-responsive">
 					<h5>6.小妹会把红包给你转回来哟！</h5>
-					<!-- <img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_5.png" src="./pic/step_tip_5.png" style="display: block;"> -->
+					<img class="preload-image responsive-image half-bottom" data-original="./pic/step_tip_7.png" src="./pic/step_tip_7.png" style="display: block;">
 				</div>
 				
 			 </div> 
